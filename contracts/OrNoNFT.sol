@@ -36,7 +36,7 @@ contract OrNoNFT is ERC721URIStorage, Ownable {
 
     event TFTNFTCreated(uint256 tokenId, string imageURI);
 
-    constructor() ERC721("True or False NFT", "TFNFT") {}
+    constructor() ERC721("OrNo NFT", "ONNFT") {}
 
     function mint(string memory _text, bool _status) public {
         _safeMint(msg.sender, tokenCounter);
@@ -64,7 +64,7 @@ contract OrNoNFT is ERC721URIStorage, Ownable {
                 Base64.encode(
                     bytes(
                         abi.encodePacked(
-                            '{"name": "Your Voice NFT",',
+                            '{"name": "OrNo NFT",',
                             '"description": "Coolest thing on the Earth",',
                             '"attributes": "",',
                             '"image": "', _imageURI , '"}'
