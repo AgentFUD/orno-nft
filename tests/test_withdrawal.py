@@ -3,7 +3,6 @@ from web3 import Web3
 
 def test_withdrawal():
     account = accounts[0]
-    print(account)
     contract = TrueFalseNFT.deploy({'from': account})
     
     contract.mint("WHAT", True, {'from': account})
