@@ -1,10 +1,10 @@
-from brownie import accounts, network, TrueFalseNFT
+from brownie import accounts, network, OrNoNFT
 from web3 import Web3
 from helpers import token_uri_to_svg
 
 def test_tokenuri_after_flip():
     account = accounts[0]
-    contract = TrueFalseNFT.deploy({'from': account})
+    contract = OrNoNFT.deploy({'from': account})
     
     contract.mint("WHATOO", True, {'from': account})
 

@@ -1,10 +1,10 @@
 import os
-from brownie import TrueFalseNFT, accounts, network, config
+from brownie import OrNoNFT, accounts, network, config
 
 def main():
     account = accounts[0]
     # account = accounts.add(config['wallets']['from_key'])
-    contract = TrueFalseNFT.deploy({'from': account})
+    contract = OrNoNFT.deploy({'from': account})
     contract.mint("USDT", True, {'from': account})
     num = contract.tokenCounter()
     

@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@brechtpd/base64.sol";
 
-contract TrueFalseNFT is ERC721URIStorage, Ownable {
+contract OrNoNFT is ERC721URIStorage, Ownable {
 
     using Strings for uint256;
 
@@ -79,9 +79,9 @@ contract TrueFalseNFT is ERC721URIStorage, Ownable {
         require(
             msg.sender == ownerOf(_tokenId) || 
             lockedTokens[_tokenId] == false, 
-            "TrueFalseNFT: Flip error, not owner or token is locked"
+            "OrNoNFT: Flip error, not owner or token is locked"
         );
-        require(msg.value >= flipPrice, "TrueFalseNFT: Flip error, unsufficient funds");
+        require(msg.value >= flipPrice, "OrNoNFT: Flip error, unsufficient funds");
         flips[_tokenId] += 1;
         tokenStates[_tokenId] = tokenStates[_tokenId] == true ? false : true;
         string memory statusText = tokenStates[_tokenId] ? "TRUE" : "FALSE";
@@ -93,7 +93,7 @@ contract TrueFalseNFT is ERC721URIStorage, Ownable {
         require(
             ownerOf(_tokenId) == msg.sender &&
             msg.value >= lockPrice, 
-            "TrueFalseNFT: Lock error, not owner or insufficient funds"
+            "OrNoNFT: Lock error, not owner or insufficient funds"
         );
         lockedTokens[_tokenId] = true;
     }
