@@ -11,9 +11,12 @@ contract TrueFalseNFT is ERC721URIStorage, Ownable {
     // Holds the next NFT id
     uint256 public tokenCounter;
 
+    // Stores actual statement for every token
+    mapping(uint256 => string) public tokenTexts;
+
     // Stores actual true/false for every token
     mapping(uint256 => bool) public tokenStates;
-
+    
     // Stores locked tokens true/false
     mapping(uint256 => bool) public lockedTokens;
 
@@ -37,6 +40,7 @@ contract TrueFalseNFT is ERC721URIStorage, Ownable {
         string memory statusText = _status ? "TRUE" : "FALSE";
         string memory imageURI = svgToImageURI(_text, statusText);
         _setTokenURI(tokenCounter, formatTokenURI(imageURI));
+        tokenTexts[tokenCounter] = _text;
         tokenStates[tokenCounter] = _status;
         tokenCounter++;
         emit TFTNFTCreated(tokenCounter, imageURI);
@@ -76,6 +80,9 @@ contract TrueFalseNFT is ERC721URIStorage, Ownable {
         );
         require(msg.value >= flipPrice, "TrueFalseNFT: Flip error, unsufficient funds");
         tokenStates[_tokenId] = tokenStates[_tokenId] == true ? false : true;
+        string memory statusText = tokenStates[_tokenId] ? "TRUE" : "FALSE";
+        string memory imageURI = svgToImageURI(tokenTexts[_tokenId], statusText);
+        _setTokenURI(_tokenId, formatTokenURI(imageURI));
         flips[_tokenId] += 1;
     }
 
