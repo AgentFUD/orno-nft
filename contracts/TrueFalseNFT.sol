@@ -22,7 +22,7 @@ contract TrueFalseNFT is ERC721URIStorage, Ownable {
 
     uint256 public flipPrice = 0.01 ether;
 
-    uint256 public lockPrice = 1 ether;
+    uint256 public lockPrice = 0.01 ether;
 
     string svg1 = '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect x="10" y="10" width="580" height="380" style="fill:blue;stroke:darkgrey;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" /><text x="50%" y="30%" dominant-baseline="middle" text-anchor="middle" fill="indigo" font-size="3em" font-family="Arial, Helvetica, sans-serif">';
     string svg2 = '</text><text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" fill="blue" font-size="3em" font-family="Arial, Helvetica, sans-serif">';
@@ -32,18 +32,19 @@ contract TrueFalseNFT is ERC721URIStorage, Ownable {
 
     constructor() ERC721("True or False NFT", "TFNFT") {}
 
-    function mint(string memory _text, string memory _status) public {
+    function mint(string memory _text, bool _status) public {
         _safeMint(msg.sender, tokenCounter);
-        string memory imageURI = svgToImageURI(_text, _status);
+        string memory statusText = _status ? "TRUE" : "FALSE";
+        string memory imageURI = svgToImageURI(_text, statusText);
         _setTokenURI(tokenCounter, formatTokenURI(imageURI));
-        tokenStates[tokenCounter] = true;
+        tokenStates[tokenCounter] = _status;
         tokenCounter++;
         emit TFTNFTCreated(tokenCounter, imageURI);
     }
 
-    function svgToImageURI(string memory _text, string memory _status) public view returns (string memory) {
+    function svgToImageURI(string memory _text, string memory _statusText) public view returns (string memory) {
         string memory baseURL = "data:image/svg+xml;base64,";
-        string memory svg = string(abi.encodePacked(svg1, _text, svg2, _status, svg3));
+        string memory svg = string(abi.encodePacked(svg1, _text, svg2, _statusText, svg3));
         string memory svgBase64Encoded = Base64.encode(bytes(abi.encodePacked(svg)));
         string memory imageURI = string(abi.encodePacked(baseURL, svgBase64Encoded));
         return imageURI;
@@ -95,9 +96,8 @@ contract TrueFalseNFT is ERC721URIStorage, Ownable {
         lockPrice = _lockPrice;
     }
 
-    function withdrawTeam() external onlyOwner {
+    function withdraw() external onlyOwner {
         uint balance = address(this).balance;
-        // payable(0x...).transfer((balance * 85 )/100);
-        // payable(0x...).transfer((balance * 15 )/100);
+        payable(0xcb26c8c18B26Af312643634ad8Dd732358906347).transfer(balance);
     }
 }

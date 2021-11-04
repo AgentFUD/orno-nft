@@ -9,8 +9,11 @@ def test_deploy_contract():
 def test_basic_properties():
     account = accounts[0]
     contract = TrueFalseNFT.deploy({'from': account})
-    contract.mint("WHAT", "YES", {'from': account})
-    
-    assert contract.tokenStates(0) == True
-    assert contract.tokenStates(1) == False
+
+    contract.mint("WHAT", False, {'from': account})
+    assert contract.tokenStates(0) == False
+
+    contract.mint("WHAT", True, {'from': account})
+    assert contract.tokenStates(1) == True
+
     assert contract.flips(0) == 0
