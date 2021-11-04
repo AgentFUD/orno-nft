@@ -38,7 +38,7 @@ contract OrNoNFT is ERC721URIStorage, Ownable {
 
     constructor() ERC721("OrNo NFT", "ONNFT") {}
 
-    function mint(string memory _text, bool _status) public {
+    function mint(string memory _text, bool _status) external {
         _safeMint(msg.sender, tokenCounter);
         string memory statusText = _status ? "TRUE" : "FALSE";
         string memory imageURI = svgToImageURI(_text, statusText, 0);
@@ -49,7 +49,7 @@ contract OrNoNFT is ERC721URIStorage, Ownable {
         emit TFTNFTCreated(tokenCounter, imageURI);
     }
 
-    function svgToImageURI(string memory _text, string memory _statusText, uint256 flips) public view returns (string memory) {
+    function svgToImageURI(string memory _text, string memory _statusText, uint256 flips) private view returns (string memory) {
         string memory baseURL = "data:image/svg+xml;base64,";
         string memory svg = string(abi.encodePacked(svg1, _text, svg2, _statusText, svg3, flips.toString(), svg4));
         string memory svgBase64Encoded = Base64.encode(bytes(abi.encodePacked(svg)));
@@ -57,7 +57,7 @@ contract OrNoNFT is ERC721URIStorage, Ownable {
         return imageURI;
     }
 
-    function formatTokenURI(string memory _imageURI) public pure returns (string memory) {
+    function formatTokenURI(string memory _imageURI) private pure returns (string memory) {
         return string(
             abi.encodePacked(
                 "data:application/json;base64,",
