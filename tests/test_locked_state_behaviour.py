@@ -1,4 +1,4 @@
-from brownie import accounts, network, OrNoNFT
+from brownie import accounts, network, OrNoNFT, SVGLib
 from web3 import Web3
 import brownie
 
@@ -6,6 +6,7 @@ import brownie
 def test_locked_nft_can_be_locked_twice():
     owner = accounts[0]
     flipper1 = accounts[1]
+    SVGLib.deploy({'from': owner})
     contract = OrNoNFT.deploy({'from': owner})
     contract.mint("First", True, {'from': owner})
 
@@ -18,6 +19,7 @@ def test_locked_nft_can_be_locked_twice():
 def test_locked_nft_can_be_flipped_by_owner():
     owner = accounts[0]
     flipper1 = accounts[1]
+    SVGLib.deploy({'from': owner})
     contract = OrNoNFT.deploy({'from': owner})
     contract.mint("Bullshit", False, {'from': owner})
 
@@ -33,6 +35,7 @@ def test_locked_nft_can_be_flipped_by_owner():
 def test_locked_nft_can_not_be_flipped_by_non_owner():
     owner = accounts[0]
     flipper1 = accounts[1]
+    SVGLib.deploy({'from': owner})
     contract = OrNoNFT.deploy({'from': owner})
     contract.mint("BTC is good", True, {'from': owner})
 

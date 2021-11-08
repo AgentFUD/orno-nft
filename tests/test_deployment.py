@@ -1,13 +1,15 @@
-from brownie import accounts, network, OrNoNFT
+from brownie import accounts, network, OrNoNFT, SVGLib
 from web3 import Web3
 
 def test_deploy_contract():
     account = accounts[0]
+    svgLib = SVGLib.deploy({'from': account})
     contract = OrNoNFT.deploy({'from': account})
     assert len(contract.address) == 42
 
 def test_basic_properties():
     account = accounts[0]
+    svgLib = SVGLib.deploy({'from': account})
     contract = OrNoNFT.deploy({'from': account})
 
     contract.mint("WHAT", False, {'from': account})
