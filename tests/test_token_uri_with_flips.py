@@ -13,8 +13,8 @@ def test_tokenuri_after_flip():
     svg_text = token_uri_to_svg(token_uri=token_uri)
 
     assert 'WHATOO' in svg_text
-    assert 'TRUE' in svg_text
-    assert 'flips: 0' in svg_text
+    assert 'YES &#160;&#160;#&#160;&#160;' in svg_text
+    assert '0 FLIPS' in svg_text
 
     """First flip """
     contract.flip(0, {'from': account, 'value': Web3.toWei(0.01, 'ether')})
@@ -23,8 +23,8 @@ def test_tokenuri_after_flip():
     svg_text = token_uri_to_svg(token_uri=token_uri)
 
     assert 'WHATOO' in svg_text
-    assert 'FALSE' in svg_text
-    assert 'flips: 1' in svg_text
+    assert 'NO &#160;&#160;#&#160;&#160;' in svg_text
+    assert '1 FLIPS' in svg_text
 
     """Second flip """
     contract.flip(0, {'from': account, 'value': Web3.toWei(0.01, 'ether')})
@@ -33,5 +33,5 @@ def test_tokenuri_after_flip():
     svg_text = token_uri_to_svg(token_uri=token_uri)
 
     assert 'WHATOO' in svg_text
-    assert 'TRUE' in svg_text
-    assert 'flips: 2' in svg_text
+    assert 'YES &#160;&#160;#&#160;&#160;' in svg_text
+    assert '2 FLIPS' in svg_text

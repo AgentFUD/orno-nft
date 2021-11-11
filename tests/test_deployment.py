@@ -9,7 +9,7 @@ def test_deploy_contract():
 
 def test_basic_properties():
     account = accounts[0]
-    svgLib = SVGLib.deploy({'from': account})
+    # svgLib = SVGLib.deploy({'from': account})
     contract = OrNoNFT.deploy({'from': account})
 
     contract.mint("WHAT", False, {'from': account})

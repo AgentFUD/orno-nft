@@ -13,7 +13,7 @@ def test_tokenuri_after_mint_is_correct_what_true():
     svg_text = token_uri_to_svg(token_uri=token_uri)
 
     assert 'WHAT' in svg_text
-    assert 'TRUE' in svg_text
+    assert 'YES &#160;&#160;#&#160;&#160;' in svg_text
 
 def test_tokenuri_after_mint_is_correct_tesla_false():
     account = accounts[0]
@@ -26,7 +26,7 @@ def test_tokenuri_after_mint_is_correct_tesla_false():
     svg_text = token_uri_to_svg(token_uri=token_uri)
     
     assert 'TESLA' in svg_text
-    assert 'FALSE' in svg_text
+    assert 'NO &#160;&#160;#&#160;&#160;' in svg_text
 
 def test_tokenuri_after_mint_is_correct_bitcoin_true():
     account = accounts[0]
@@ -39,4 +39,4 @@ def test_tokenuri_after_mint_is_correct_bitcoin_true():
     svg_text = token_uri_to_svg(token_uri=token_uri)
     
     assert 'Bitcoin' in svg_text
-    assert 'TRUE' in svg_text
+    assert 'YES &#160;&#160;#&#160;&#160;' in svg_text
