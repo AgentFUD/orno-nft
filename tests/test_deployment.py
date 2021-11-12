@@ -1,17 +1,12 @@
-from brownie import accounts, network, OrNoNFT, SVGLib
 from web3 import Web3
+import pytest
 
-def test_deploy_contract():
+def test_deploy_contract(accounts, contract):
     account = accounts[0]
-    svgLib = SVGLib.deploy({'from': account})
-    contract = OrNoNFT.deploy({'from': account})
     assert len(contract.address) == 42
 
-def test_basic_properties():
+def test_basic_properties(accounts, contract):
     account = accounts[0]
-    # svgLib = SVGLib.deploy({'from': account})
-    contract = OrNoNFT.deploy({'from': account})
-
     contract.mint("WHAT", False, {'from': account})
     assert contract.tokenStates(0) == False
 
