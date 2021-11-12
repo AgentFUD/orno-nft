@@ -32,7 +32,11 @@ contract OrNoNFT is ERC721URIStorage, Ownable {
 
     uint256 public lockPrice = 0.01 ether;
 
-    event TFTNFTCreated(uint256 tokenId, string imageURI);
+    event orNoNFTCreated(uint256 tokenId, string imageURI);
+    
+    event orNoNFTFlipped(uint256 tokenId);
+    
+    event orNoNFTLocked(uint256 tokenId);
 
     constructor() ERC721("OrNo NFT", "ONNFT") {
 
@@ -45,7 +49,7 @@ contract OrNoNFT is ERC721URIStorage, Ownable {
         tokenTexts[tokenCounter] = _text;
         tokenStates[tokenCounter] = _status;
         tokenCounter++;
-        emit TFTNFTCreated(tokenCounter, imageURI);
+        emit orNoNFTCreated(tokenCounter, imageURI);
     }
 
     function flip(uint256 _tokenId) payable public {
@@ -60,6 +64,7 @@ contract OrNoNFT is ERC721URIStorage, Ownable {
         tokenStates[_tokenId] = tokenStates[_tokenId] == true ? false : true;
         string memory imageURI = SVGLib.svgToImageURI(tokenTexts[_tokenId], tokenStates[_tokenId], flips[_tokenId]);
         _setTokenURI(_tokenId, SVGLib.formatTokenURI(imageURI));
+        emit orNoNFTFlipped(_tokenId);
     }
 
     function lock(uint256 _tokenId) payable public {
@@ -69,6 +74,7 @@ contract OrNoNFT is ERC721URIStorage, Ownable {
             "OrNoNFT: Lock error, not owner or insufficient funds"
         );
         lockedTokens[_tokenId] = true;
+        emit orNoNFTLocked(_tokenId);
     }
 
     function setFlipPrice(uint256 _flipPrice) public onlyOwner {
