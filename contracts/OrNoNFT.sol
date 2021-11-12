@@ -26,6 +26,8 @@ contract OrNoNFT is ERC721URIStorage, Ownable {
     // Stores how many times a token flipped
     mapping(uint256 => uint256) public flips;
 
+    uint256 public totalFlips;
+
     uint256 public flipPrice = 0.01 ether;
 
     uint256 public lockPrice = 0.01 ether;
@@ -54,6 +56,7 @@ contract OrNoNFT is ERC721URIStorage, Ownable {
         );
         require(msg.value >= flipPrice, "OrNoNFT: Flip error, unsufficient funds");
         flips[_tokenId] += 1;
+        totalFlips += 1;
         tokenStates[_tokenId] = tokenStates[_tokenId] == true ? false : true;
         string memory imageURI = SVGLib.svgToImageURI(tokenTexts[_tokenId], tokenStates[_tokenId], flips[_tokenId]);
         _setTokenURI(_tokenId, SVGLib.formatTokenURI(imageURI));
