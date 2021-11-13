@@ -3,13 +3,14 @@
 pragma solidity 0.8.9;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@brechtpd/base64.sol";
+import "../interfaces/ISVGLib.sol";
 import "./libraries/SVGLib.sol";
 
-contract OrNoNFT is ERC721URIStorage, Ownable {
+contract OrNoNFT is ERC721URIStorage, ERC721Enumerable, Ownable {
 
-    // using Strings for uint256;
+    address svgLibAddress;
 
     // Holds the next NFT id
     uint256 public tokenCounter;
@@ -38,14 +39,14 @@ contract OrNoNFT is ERC721URIStorage, Ownable {
     
     event orNoNFTLocked(uint256 tokenId);
 
-    constructor() ERC721("OrNo NFT", "ONNFT") {
-
+    constructor(address _svgLibAddress) ERC721("OrNo NFT", "ONNFT") {
+        svgLibAddress = _svgLibAddress;
     }
 
-    function mint(string memory _text, bool _status) external {
+    function mint(string memory _text, bool _status) public onlyOwner {
         _safeMint(msg.sender, tokenCounter);
-        string memory imageURI = SVGLib.svgToImageURI(_text, _status, 0);
-        _setTokenURI(tokenCounter, SVGLib.formatTokenURI(imageURI));
+        string memory imageURI = ISVGLib(svgLibAddress).svgToImageURI(_text, _status, 0);
+        _setTokenURI(tokenCounter, ISVGLib(svgLibAddress).formatTokenURI(imageURI));
         tokenTexts[tokenCounter] = _text;
         tokenStates[tokenCounter] = _status;
         tokenCounter++;
@@ -62,8 +63,8 @@ contract OrNoNFT is ERC721URIStorage, Ownable {
         flips[_tokenId] += 1;
         totalFlips += 1;
         tokenStates[_tokenId] = tokenStates[_tokenId] == true ? false : true;
-        string memory imageURI = SVGLib.svgToImageURI(tokenTexts[_tokenId], tokenStates[_tokenId], flips[_tokenId]);
-        _setTokenURI(_tokenId, SVGLib.formatTokenURI(imageURI));
+        string memory imageURI = ISVGLib(svgLibAddress).svgToImageURI(tokenTexts[_tokenId], tokenStates[_tokenId], flips[_tokenId]);
+        _setTokenURI(_tokenId, ISVGLib(svgLibAddress).formatTokenURI(imageURI));
         emit orNoNFTFlipped(_tokenId);
     }
 
@@ -88,5 +89,37 @@ contract OrNoNFT is ERC721URIStorage, Ownable {
     function withdraw() external onlyOwner {
         uint balance = address(this).balance;
         payable(0xcb26c8c18B26Af312643634ad8Dd732358906347).transfer(balance);
+    }
+
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
+        internal
+        override(ERC721, ERC721Enumerable)
+    {
+        super._beforeTokenTransfer(from, to, tokenId);
+    }
+
+    function _burn(uint256 tokenId)
+        internal
+        override(ERC721, ERC721URIStorage)
+    {
+        super._burn(tokenId);
+    }
+
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override(ERC721, ERC721URIStorage)
+        returns (string memory)
+    {
+        return super.tokenURI(tokenId);
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721, ERC721Enumerable)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
     }
 }
