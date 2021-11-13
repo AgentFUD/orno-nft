@@ -1,8 +1,7 @@
 from web3 import Web3
 import pytest
 
-def test_deploy_contract(accounts, contract):
-    account = accounts[0]
+def test_deploy_contract(contract):
     assert len(contract.address) == 42
 
 def test_basic_properties(accounts, contract):

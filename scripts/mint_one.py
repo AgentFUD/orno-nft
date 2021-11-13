@@ -1,11 +1,12 @@
 import os
-from brownie import OrNoNFT, SVGLib, accounts, network, config
+from brownie import OrNoNFT, SVGLibReal, accounts, network, config
 
 def main():
     account = accounts[0]
     # account = accounts.add(config['wallets']['from_key'])
-    SVGLib.deploy({"from": account})
-    contract = OrNoNFT.deploy({'from': account})
+    SVGLibReal.deploy({"from": account})
+    contract = OrNoNFT.deploy(SVGLibReal[0].address, {'from': account})
+    contract = OrNoNFT[0]
     contract.mint("USDT", True, {'from': account})
     num = contract.tokenCounter()
     

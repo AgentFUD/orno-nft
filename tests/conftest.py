@@ -1,5 +1,5 @@
 import pytest
-from brownie import accounts, OrNoNFT, SVGLib
+from brownie import accounts, OrNoNFT, SVGLibReal
 
 @pytest.fixture(scope='session')
 def accountz():
@@ -8,7 +8,7 @@ def accountz():
 @pytest.fixture(scope='module')
 def contract(accountz):
     owner = accountz[0]
-    SVGLib.deploy({'from': owner})
-    contract = OrNoNFT.deploy({'from': owner})
+    SVGLibReal.deploy({'from': owner})
+    contract = OrNoNFT.deploy(SVGLibReal[0].address, {'from': owner})
     return contract
 
