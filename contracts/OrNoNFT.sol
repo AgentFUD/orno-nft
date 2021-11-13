@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "../interfaces/ISVGLib.sol";
+import "./libraries/SVGLib.sol";
 
 contract OrNoNFT is ERC721URIStorage, ERC721Enumerable, Ownable {
 
@@ -42,7 +43,7 @@ contract OrNoNFT is ERC721URIStorage, ERC721Enumerable, Ownable {
         svgLibAddress = _svgLibAddress;
     }
 
-    function mint(string memory _text, bool _status) public {
+    function mint(string memory _text, bool _status) public onlyOwner {
         _safeMint(msg.sender, tokenCounter);
         string memory imageURI = ISVGLib(svgLibAddress).svgToImageURI(_text, _status, 0);
         _setTokenURI(tokenCounter, ISVGLib(svgLibAddress).formatTokenURI(imageURI));
@@ -97,7 +98,10 @@ contract OrNoNFT is ERC721URIStorage, ERC721Enumerable, Ownable {
         super._beforeTokenTransfer(from, to, tokenId);
     }
 
-    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+    function _burn(uint256 tokenId)
+        internal
+        override(ERC721, ERC721URIStorage)
+    {
         super._burn(tokenId);
     }
 
