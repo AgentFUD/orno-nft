@@ -21,9 +21,6 @@ contract OrNoNFT is ERC721URIStorage, ERC721Enumerable, Ownable {
     // Stores actual true/false for every token
     mapping(uint256 => bool) public tokenStates;
     
-    // Stores locked tokens true/false
-    mapping(uint256 => bool) public lockedTokens;
-
     // Stores how many times a token flipped
     mapping(uint256 => uint256) public flips;
 
@@ -31,14 +28,10 @@ contract OrNoNFT is ERC721URIStorage, ERC721Enumerable, Ownable {
 
     uint256 public flipPrice = 0.01 ether;
 
-    uint256 public lockPrice = 0.01 ether;
-
     event orNoNFTCreated(uint256 tokenId, string imageURI);
     
     event orNoNFTFlipped(uint256 tokenId);
     
-    event orNoNFTLocked(uint256 tokenId);
-
     constructor(address _svgLibAddress) ERC721("OrNo NFT", "ONNFT") {
         svgLibAddress = _svgLibAddress;
     }
@@ -54,11 +47,6 @@ contract OrNoNFT is ERC721URIStorage, ERC721Enumerable, Ownable {
     }
 
     function flip(uint256 _tokenId) payable public {
-        require(
-            msg.sender == ownerOf(_tokenId) || 
-            lockedTokens[_tokenId] == false, 
-            "OrNoNFT: Flip error, not owner or token is locked"
-        );
         require(msg.value >= flipPrice, "OrNoNFT: Flip error, unsufficient funds");
         flips[_tokenId] += 1;
         totalFlips += 1;
@@ -68,22 +56,8 @@ contract OrNoNFT is ERC721URIStorage, ERC721Enumerable, Ownable {
         emit orNoNFTFlipped(_tokenId);
     }
 
-    function lock(uint256 _tokenId) payable public {
-        require(
-            ownerOf(_tokenId) == msg.sender &&
-            msg.value >= lockPrice, 
-            "OrNoNFT: Lock error, not owner or insufficient funds"
-        );
-        lockedTokens[_tokenId] = true;
-        emit orNoNFTLocked(_tokenId);
-    }
-
     function setFlipPrice(uint256 _flipPrice) public onlyOwner {
         flipPrice = _flipPrice;
-    }
-
-    function setLockPrice(uint256 _lockPrice) public onlyOwner {
-        lockPrice = _lockPrice;
     }
 
     function withdraw() external onlyOwner {
