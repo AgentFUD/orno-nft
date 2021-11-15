@@ -32,7 +32,7 @@ library SVGLibReal {
 
     string constant orNoLogo = "<g><text font-family='WF' font-size='9' text-align='center' letter-spacing='2.7' style='fill: #fff;'><textPath href='#io'>ORNO.IO</textPath></text></g>";
 
-    string constant svg_yes = "<g class='circle'><text font-family='WF' font-size='33.5' font-weight='500' letter-spacing='4' style='fill: green;'><textPath href='#text'> YES &#160;&#160;#&#160;&#160; YES &#160;&#160;#&#160;&#160; YES &#160;&#160;#&#160;&#160; YES &#160;&#160;#&#160;&#160; YES &#160;&#160;#&#160;&#160; YES &#160;&#160;#&#160;&#160; YES &#160;&#160;#&#160;&#160;</textPath></text></g></svg>";
+    string constant svg_yes = "<g class='circle'><text font-family='WF' font-size='33.5' font-weight='500' letter-spacing='4.2' style='fill: green;'><textPath href='#text'> YES &#160;&#160;#&#160;&#160; YES &#160;&#160;#&#160;&#160; YES &#160;&#160;#&#160;&#160; YES &#160;&#160;#&#160;&#160; YES &#160;&#160;#&#160;&#160; YES &#160;&#160;#&#160;&#160;</textPath></text></g></svg>";
     string constant svg_no = "<g class='circle'> <text font-family='WF' font-size='32.5' font-weight='500' letter-spacing='4' style='fill: darkred;'> <textPath href='#text'> NO &#160;&#160;#&#160;&#160; NO &#160;&#160;#&#160;&#160; NO &#160;&#160;#&#160;&#160; NO &#160;&#160;#&#160;&#160; NO &#160;&#160;#&#160;&#160; NO &#160;&#160;#&#160;&#160; NO &#160;&#160;#&#160;&#160; NO &#160;&#160;#&#160;&#160;</textPath> </text> </g></svg>";
     
     function svgToImageURI(string memory _text, bool _yesno, uint256 flips) external pure returns (string memory) {
