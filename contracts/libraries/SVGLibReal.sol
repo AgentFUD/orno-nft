@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.9;
+pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@brechtpd/base64.sol";
@@ -35,7 +35,12 @@ library SVGLibReal {
     string constant svg_yes = "<g class='circle'><text font-family='WF' font-size='33.5' font-weight='500' letter-spacing='4.2' style='fill: green;'><textPath href='#text'> YES &#160;&#160;#&#160;&#160; YES &#160;&#160;#&#160;&#160; YES &#160;&#160;#&#160;&#160; YES &#160;&#160;#&#160;&#160; YES &#160;&#160;#&#160;&#160; YES &#160;&#160;#&#160;&#160;</textPath></text></g></svg>";
     string constant svg_no = "<g class='circle'> <text font-family='WF' font-size='32.5' font-weight='500' letter-spacing='4' style='fill: darkred;'> <textPath href='#text'> NO &#160;&#160;#&#160;&#160; NO &#160;&#160;#&#160;&#160; NO &#160;&#160;#&#160;&#160; NO &#160;&#160;#&#160;&#160; NO &#160;&#160;#&#160;&#160; NO &#160;&#160;#&#160;&#160; NO &#160;&#160;#&#160;&#160; NO &#160;&#160;#&#160;&#160;</textPath> </text> </g></svg>";
     
-    function svgToImageURI(string memory _text, bool _yesno, uint256 flips) external pure returns (string memory) {
+
+    function getSVG(string memory _text, bool _yesno, uint256 _flips) external pure returns (string memory) {
+        return _formatTokenURI(_svgToImageURI(_text, _yesno, _flips));
+    }
+
+    function _svgToImageURI(string memory _text, bool _yesno, uint256 flips) internal pure returns (string memory) {
         
         string memory baseURL = "data:image/svg+xml;base64,";
         
@@ -93,7 +98,7 @@ library SVGLibReal {
         return imageURI;
     }
     
-    function formatTokenURI(string memory _imageURI) external pure returns (string memory) {
+    function _formatTokenURI(string memory _imageURI) internal pure returns (string memory) {
         return string(
             abi.encodePacked(
                 "data:application/json;base64,",

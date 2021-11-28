@@ -1,14 +1,12 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.9;
+pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "../interfaces/ISVGLib.sol";
-import "./libraries/SVGLib.sol";
 
-contract OrNoNFT is ERC721URIStorage, ERC721Enumerable, Ownable {
+contract OrNoNFT is ERC721Enumerable, Ownable {
 
     address svgLibAddress;
 
@@ -28,8 +26,6 @@ contract OrNoNFT is ERC721URIStorage, ERC721Enumerable, Ownable {
 
     uint256 public flipPrice = 0.01 ether;
 
-    event orNoNFTCreated(uint256 tokenId, string imageURI);
-    
     event orNoNFTFlipped(uint256 tokenId);
     
     constructor(address _svgLibAddress) ERC721("OrNo NFT", "ONNFT") {
@@ -38,12 +34,9 @@ contract OrNoNFT is ERC721URIStorage, ERC721Enumerable, Ownable {
 
     function mint(string memory _text, bool _status) public onlyOwner {
         _safeMint(msg.sender, tokenCounter);
-        string memory imageURI = ISVGLib(svgLibAddress).svgToImageURI(_text, _status, 0);
-        _setTokenURI(tokenCounter, ISVGLib(svgLibAddress).formatTokenURI(imageURI));
         tokenTexts[tokenCounter] = _text;
         tokenStates[tokenCounter] = _status;
         tokenCounter++;
-        emit orNoNFTCreated(tokenCounter, imageURI);
     }
 
     function flip(uint256 _tokenId) payable public {
@@ -51,8 +44,6 @@ contract OrNoNFT is ERC721URIStorage, ERC721Enumerable, Ownable {
         flips[_tokenId] += 1;
         totalFlips += 1;
         tokenStates[_tokenId] = tokenStates[_tokenId] == true ? false : true;
-        string memory imageURI = ISVGLib(svgLibAddress).svgToImageURI(tokenTexts[_tokenId], tokenStates[_tokenId], flips[_tokenId]);
-        _setTokenURI(_tokenId, ISVGLib(svgLibAddress).formatTokenURI(imageURI));
         emit orNoNFTFlipped(_tokenId);
     }
 
@@ -61,39 +52,10 @@ contract OrNoNFT is ERC721URIStorage, ERC721Enumerable, Ownable {
     }
 
     function withdraw() external onlyOwner {
-        uint balance = address(this).balance;
-        payable(0xcb26c8c18B26Af312643634ad8Dd732358906347).transfer(balance);
+        require(payable(_msgSender()).send(address(this).balance));
     }
 
-    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
-        internal
-        override(ERC721, ERC721Enumerable)
-    {
-        super._beforeTokenTransfer(from, to, tokenId);
-    }
-
-    function _burn(uint256 tokenId)
-        internal
-        override(ERC721, ERC721URIStorage)
-    {
-        super._burn(tokenId);
-    }
-
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        override(ERC721, ERC721URIStorage)
-        returns (string memory)
-    {
-        return super.tokenURI(tokenId);
-    }
-
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC721, ERC721Enumerable)
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId);
+    function tokenURI(uint256 _tokenId) public view override(ERC721) returns (string memory) {
+        return ISVGLib(svgLibAddress).getSVG(tokenTexts[_tokenId], tokenStates[_tokenId], flips[_tokenId]);
     }
 }
