@@ -14,5 +14,4 @@ def test_withdrawal(accounts, web3, contract):
 
     assert contract.balance() == web3.toWei(0, "ether")
 
-    assert account_balance > account.balance()
-    assert account_balance * 0.99 < account.balance()
+    assert account_balance == account.balance()
