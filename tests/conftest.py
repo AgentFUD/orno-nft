@@ -9,9 +9,16 @@ def orno_nft_contract():
     orno = OrNoNFT.deploy({"from": owner})
     badgeSVGLib = OrNoBadgeSVGLibReal.deploy({"from": owner})
     badge = OrNoBadgeNFT.deploy({"from": owner})
-    
     badge.setSVGLibAddress(badgeSVGLib.address)
     orno.setSVGLibAddress(svgLib.address)
     orno.setBadgeAddress(badge.address)
-
     return orno
+
+
+@pytest.fixture(scope="module")
+def orno_badge_nft_contract():
+    owner = accounts[0]
+    badgeSVGLib = OrNoBadgeSVGLibReal.deploy({"from": owner})
+    badge = OrNoBadgeNFT.deploy({"from": owner})
+    badge.setSVGLibAddress(badgeSVGLib.address)
+    return badge
