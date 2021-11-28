@@ -3,7 +3,7 @@ from brownie import accounts, OrNoNFT, OrNoSVGLibReal, OrNoBadgeNFT, OrNoBadgeSV
 
 
 @pytest.fixture(scope="module")
-def contract():
+def orno_nft_contract():
     owner = accounts[0]
     svgLib = OrNoSVGLibReal.deploy({"from": owner})
     orno = OrNoNFT.deploy({"from": owner})
