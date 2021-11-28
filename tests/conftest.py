@@ -1,10 +1,17 @@
 import pytest
-from brownie import accounts, OrNoNFT, SVGLibReal
+from brownie import accounts, OrNoNFT, OrNoSVGLibReal, OrNoBadgeNFT, OrNoBadgeSVGLibReal
 
 
 @pytest.fixture(scope="module")
 def contract():
     owner = accounts[0]
-    SVGLibReal.deploy({"from": owner})
-    contract = OrNoNFT.deploy(SVGLibReal[0].address, {"from": owner})
-    return contract
+    svgLib = OrNoSVGLibReal.deploy({"from": owner})
+    orno = OrNoNFT.deploy({"from": owner})
+    badgeSVGLib = OrNoBadgeSVGLibReal.deploy({"from": owner})
+    badge = OrNoBadgeNFT.deploy({"from": owner})
+    
+    badge.setSVGLibAddress(badgeSVGLib.address)
+    orno.setSVGLibAddress(svgLib.address)
+    orno.setBadgeAddress(badge.address)
+
+    return orno

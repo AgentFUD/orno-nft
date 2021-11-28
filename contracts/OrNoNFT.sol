@@ -8,7 +8,9 @@ import "../interfaces/ISVGLib.sol";
 
 contract OrNoNFT is ERC721Enumerable, Ownable {
 
-    address svgLibAddress;
+    address internal svgLibAddress;
+
+    address internal badgeAddress;
 
     // Holds the next NFT id
     uint256 public tokenCounter;
@@ -28,8 +30,16 @@ contract OrNoNFT is ERC721Enumerable, Ownable {
 
     event orNoNFTFlipped(uint256 tokenId);
     
-    constructor(address _svgLibAddress) ERC721("OrNo NFT", "ONNFT") {
+    constructor() ERC721("orNo NFT", "ORNO") {
+
+    }
+
+    function setSVGLibAddress(address _svgLibAddress) public onlyOwner {
         svgLibAddress = _svgLibAddress;
+    }
+
+    function setBadgeAddress(address _badgeAddress) public onlyOwner {
+        badgeAddress = _badgeAddress;
     }
 
     function mint(string memory _text, bool _status) public onlyOwner {

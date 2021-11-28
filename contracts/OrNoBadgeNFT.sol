@@ -1,48 +1,43 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.9;
+pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "../interfaces/ISVGLib.sol";
 
-contract OrNoBadgeNFT is ERC721URIStorage, ERC721Enumerable, Ownable {
+contract OrNoBadgeNFT is ERC721Enumerable, Ownable {
 
     address svgLibAddress;
 
-        constructor(address _svgLibAddress) ERC721("OrNo NFT", "ONNFT") {
+    // Holds the next NFT id
+    uint256 public tokenCounter;
+
+    // Stores actual statement for every token
+    mapping(uint256 => string) public tokenTexts;
+
+    mapping(uint256 => bool) public tokenStates;
+    
+    constructor() ERC721("orNo Badge NFT", "ORNOBADGE") {
+
+    }
+
+    function mint(string memory _text, bool _status) public onlyOwner {
+        _safeMint(msg.sender, tokenCounter);
+        tokenTexts[tokenCounter] = _text;
+        tokenStates[tokenCounter] = _status;
+        tokenCounter++;
+    }
+
+    function setSVGLibAddress(address _svgLibAddress) public onlyOwner {
         svgLibAddress = _svgLibAddress;
     }
 
-    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
-        internal
-        override(ERC721, ERC721Enumerable)
-    {
-        super._beforeTokenTransfer(from, to, tokenId);
+    function withdraw() external onlyOwner {
+        require(payable(_msgSender()).send(address(this).balance));
     }
 
-    function _burn(uint256 tokenId)
-        internal
-        override(ERC721, ERC721URIStorage)
-    {
-        super._burn(tokenId);
-    }
-
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        override(ERC721, ERC721URIStorage)
-        returns (string memory)
-    {
-        return super.tokenURI(tokenId);
-    }
-
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC721, ERC721Enumerable)
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId);
+    function tokenURI(uint256 _tokenId) public view override(ERC721) returns (string memory) {
+        return "ISVGLib(svgLibAddress).getSVG(tokenTexts[_tokenId], tokenStates[_tokenId], flips[_tokenId])";
     }
 }
