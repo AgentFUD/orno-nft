@@ -9,13 +9,17 @@ library OrNoBadgeSVGLibReal {
     
     using Strings for uint256;
 
-    function svgToImageURI(string memory _text) external pure returns (string memory) {
+    function getSVG(string memory _text, uint256 _flips, address _owner) external pure returns (string memory) {
+        return "Yee";
+    }
+
+    function _svgToImageURI(string memory _text) internal pure returns (string memory) {
         
         string memory imageURI = string(abi.encodePacked("test"));
         return imageURI;
     }
     
-    function formatTokenURI(string memory _imageURI) external pure returns (string memory) {
+    function _formatTokenURI(string memory _imageURI) internal pure returns (string memory) {
         return string(
             abi.encodePacked(
                 "data:application/json;base64,",

@@ -5,6 +5,7 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "../interfaces/ISVGLib.sol";
+import "../interfaces/IBadgeNFT.sol";
 
 contract OrNoNFT is ERC721Enumerable, Ownable {
 
@@ -54,6 +55,31 @@ contract OrNoNFT is ERC721Enumerable, Ownable {
         flips[_tokenId] += 1;
         totalFlips += 1;
         tokenStates[_tokenId] = tokenStates[_tokenId] == true ? false : true;
+        uint256 currentFlipsOfToken = flips[_tokenId];
+        if( currentFlipsOfToken == 10 ||
+            currentFlipsOfToken == 25 ||
+            currentFlipsOfToken == 50 ||
+            currentFlipsOfToken == 75 ||
+            currentFlipsOfToken == 100 ||
+            currentFlipsOfToken == 150 ||
+            currentFlipsOfToken == 200 ||
+            currentFlipsOfToken == 250 ||
+            currentFlipsOfToken == 350 ||
+            currentFlipsOfToken == 450 ||
+            currentFlipsOfToken == 550 ||
+            currentFlipsOfToken == 750 ||
+            currentFlipsOfToken == 950 ||
+            currentFlipsOfToken == 1250 ||
+            currentFlipsOfToken == 1600 ||
+            currentFlipsOfToken == 1950 ||
+            currentFlipsOfToken == 2400 ||
+            currentFlipsOfToken == 2850 ||
+            currentFlipsOfToken == 3350 ||
+            currentFlipsOfToken == 3850 ||
+            currentFlipsOfToken == 4500
+        ) {
+            IBadgeNFT(badgeAddress).mint(tokenTexts[_tokenId], flips[_tokenId], ownerOf(_tokenId));
+        }
         emit orNoNFTFlipped(_tokenId);
     }
 

@@ -3,29 +3,24 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "../interfaces/ISVGLib.sol";
+import "../interfaces/IBadgeSVGLib.sol";
 
-contract OrNoBadgeNFT is ERC721Enumerable, Ownable {
+contract OrNoBadgeNFT is ERC721URIStorage, Ownable {
 
     address svgLibAddress;
 
     // Holds the next NFT id
     uint256 public tokenCounter;
 
-    // Stores actual statement for every token
-    mapping(uint256 => string) public tokenTexts;
-
-    mapping(uint256 => bool) public tokenStates;
-    
     constructor() ERC721("orNo Badge NFT", "ORNOBADGE") {
 
     }
 
-    function mint(string memory _text, bool _status) public onlyOwner {
-        _safeMint(msg.sender, tokenCounter);
-        tokenTexts[tokenCounter] = _text;
-        tokenStates[tokenCounter] = _status;
+    function mint(string memory _text, uint256 _flips, address _owner) external onlyOwner {
+        _safeMint(_owner, tokenCounter);
+        _setTokenURI(tokenCounter, IBadgeSVGLib(svgLibAddress).getSVG(_text, _flips, _owner));
         tokenCounter++;
     }
 
@@ -35,9 +30,5 @@ contract OrNoBadgeNFT is ERC721Enumerable, Ownable {
 
     function withdraw() external onlyOwner {
         require(payable(_msgSender()).send(address(this).balance));
-    }
-
-    function tokenURI(uint256 _tokenId) public view override(ERC721) returns (string memory) {
-        return "ISVGLib(svgLibAddress).getSVG(tokenTexts[_tokenId], tokenStates[_tokenId], flips[_tokenId])";
     }
 }

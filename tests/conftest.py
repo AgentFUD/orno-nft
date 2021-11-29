@@ -10,8 +10,10 @@ def orno_nft_contract():
     badgeSVGLib = OrNoBadgeSVGLibReal.deploy({"from": owner})
     badge = OrNoBadgeNFT.deploy({"from": owner})
     badge.setSVGLibAddress(badgeSVGLib.address)
+    badge.transferOwnership(orno.address)
     orno.setSVGLibAddress(svgLib.address)
     orno.setBadgeAddress(badge.address)
+
     return orno
 
 
