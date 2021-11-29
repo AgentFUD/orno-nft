@@ -103,7 +103,7 @@ library OrNoSVGLibReal {
                 Base64.encode(
                     bytes(
                         abi.encodePacked(
-                            '{"name": "OrNo NFT",',
+                            '{"name": "orNo NFT",',
                             '"description": "Coolest thing on the Earth",',
                             '"attributes": "",',
                             '"image": "', _imageURI , '"}'

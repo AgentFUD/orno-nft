@@ -8,5 +8,3 @@ def test_basic_properties(accounts, orno_badge_nft_contract):
 
     orno_badge_nft_contract.mint("WHAT", 10, owner, {"from": account})
     assert orno_badge_nft_contract.ownerOf(0) == owner
-
-    assert orno_badge_nft_contract.tokenURI(0) == "Yee"
