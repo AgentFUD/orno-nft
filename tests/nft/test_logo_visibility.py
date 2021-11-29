@@ -30,11 +30,10 @@ def test_after_10_flips_badge_is_minted(accounts, web3, orno_nft_contracts):
     orno_badge_nft_contract = orno_nft_contracts[1]
 
     orno_nft_contract.mint("HasNoLogo", True)
-    token_uri = orno_nft_contract.tokenURI(0)
+
     for x in range(10):
         orno_nft_contract.flip(0, {"from": account, "value": web3.toWei(0.01, "ether")})
 
-    assert orno_badge_nft_contract.ownerOf(0) == account
     token_uri = orno_badge_nft_contract.tokenURI(0)
     svg_text = token_uri_to_svg(token_uri=token_uri)
 
