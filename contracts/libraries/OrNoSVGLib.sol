@@ -5,7 +5,7 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@brechtpd/base64.sol";
 
-library OrNoSVGLibReal {
+library OrNoSVGLib {
     
     using Strings for uint256;
 
