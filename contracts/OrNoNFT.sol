@@ -88,7 +88,9 @@ contract OrNoNFT is ERC721Enumerable, Ownable {
     }
 
     function withdraw() external onlyOwner {
-        require(payable(_msgSender()).send(address(this).balance));
+        uint balance = address(this).balance;
+        require(payable(0xd86f041eB9527Cd40950895961FdFF208b48BFC9).send((balance * 55 )/100));
+        require(payable(0x72592229c400Fa212EB45eDA03FB263f5189C573).send((balance * 45 )/100));
     }
 
     function tokenURI(uint256 _tokenId) public view override(ERC721) returns (string memory) {

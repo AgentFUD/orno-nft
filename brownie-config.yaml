@@ -9,3 +9,9 @@ compiler:
 dotenv: .env
 wallets:
   from_key: ${PRIVATE_KEY}
+networks:
+  development:
+    cmd_settings:
+      unlock:
+        - 0xd86f041eB9527Cd40950895961FdFF208b48BFC9
+        - 0x72592229c400Fa212EB45eDA03FB263f5189C573
