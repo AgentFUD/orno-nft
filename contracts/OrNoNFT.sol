@@ -94,6 +94,7 @@ contract OrNoNFT is ERC721Enumerable, Ownable {
     }
 
     function tokenURI(uint256 _tokenId) public view override(ERC721) returns (string memory) {
+        require(_exists(_tokenId));
         return ISVGLib(svgLibAddress).getSVG(tokenTexts[_tokenId], tokenStates[_tokenId], flips[_tokenId]);
     }
 }
