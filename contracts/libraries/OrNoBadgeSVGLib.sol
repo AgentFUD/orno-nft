@@ -42,7 +42,7 @@ library OrNoBadgeSVGLib {
     string constant svgEnd = "</text></svg>";
 
     function getSVG(string memory _text, uint256 _flips) external pure returns (string memory) {
-        return _formatTokenURI(_svgToImageURI(_text, _flips));
+        return _formatTokenURI(_svgToImageURI(_text, _flips), _text, _flips);
     }
 
     function _svgToImageURI(string memory _text, uint256 _flips) internal pure returns (string memory) {        
@@ -112,15 +112,18 @@ library OrNoBadgeSVGLib {
         return string(abi.encodePacked(baseURL, svgBase64Encoded));
     }
     
-    function _formatTokenURI(string memory _imageURI) internal pure returns (string memory) {
+    function _formatTokenURI(string memory _imageURI, string memory _text, uint256 _flips) internal pure returns (string memory) {
         return string(
             abi.encodePacked(
                 "data:application/json;base64,",
                 Base64.encode(
                     bytes(
                         abi.encodePacked(
-                            '{"name": "OrNo NFT",',
-                            '"description": "Coolest thing on the Earth",',
+                            '{"name": "',
+                            _text,
+                            ' orNo',
+                            ' LVL #', _flips.toString(), '",',
+                            '"description": "We have told You: Every flip counts! Enjoy your badges! Stay tuned for new features!",',
                             '"attributes": "",',
                             '"image": "', _imageURI , '"}'
                         )

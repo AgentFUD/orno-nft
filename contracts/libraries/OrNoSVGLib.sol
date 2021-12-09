@@ -32,7 +32,7 @@ library OrNoSVGLib {
     string constant svg_no = "<g class='circle'> <text font-family='WF' font-size='32.5' font-weight='500' letter-spacing='4' style='fill: darkred;'><textPath href='#txt'> NO &#160;&#160;#&#160;&#160; NO &#160;&#160;#&#160;&#160; NO &#160;&#160;#&#160;&#160; NO &#160;&#160;#&#160;&#160; NO &#160;&#160;#&#160;&#160; NO &#160;&#160;#&#160;&#160; NO &#160;&#160;#&#160;&#160;</textPath></text></g></svg>";
     
     function getSVG(string memory _text, bool _yesno, uint256 _flips) external pure returns (string memory) {
-        return _formatTokenURI(_svgToImageURI(_text, _yesno, _flips));
+        return _formatTokenURI(_svgToImageURI(_text, _yesno, _flips), _text);
     }
 
     function _svgToImageURI(string memory _text, bool _yesno, uint256 _flips) internal pure returns (string memory) {
@@ -92,15 +92,17 @@ library OrNoSVGLib {
         return imageURI;
     }
     
-    function _formatTokenURI(string memory _imageURI) internal pure returns (string memory) {
+    function _formatTokenURI(string memory _imageURI, string memory _text) internal pure returns (string memory) {
         return string(
             abi.encodePacked(
                 "data:application/json;base64,",
                 Base64.encode(
                     bytes(
                         abi.encodePacked(
-                            '{"name": "orNo NFT",',
-                            '"description": "Coolest thing on the Earth",',
+                            '{"name": "',
+                            _text,
+                            ' orNo",',
+                            '"description": "The first visually dynamic NFT on Earth. Every flip counts! Stay tuned for new features!",',
                             '"attributes": "",',
                             '"image": "', _imageURI , '"}'
                         )
