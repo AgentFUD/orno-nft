@@ -8,20 +8,27 @@ import "../interfaces/IBadgeSVGLib.sol";
 
 contract OrNoBadgeNFT is ERC721Enumerable, Ownable {
 
-    address svgLibAddress;
+    address private svgLibAddress;
+
+    address private minterAddress;
 
     // Holds the next NFT id
     uint256 public tokenCounter;
 
-    mapping(uint256 => string) internal tokenTexts;
+    mapping(uint256 => string) public tokenTexts;
 
     mapping(uint256 => uint256) public flips;
 
     constructor() ERC721("orNo Badge NFT", "ORNOBADGE") {
-
+        minterAddress = msg.sender;
     }
 
-    function mint(string memory _text, uint256 _flips, address _owner) external onlyOwner {
+    modifier onlyMinter() {
+        require(msg.sender == minterAddress);
+        _;
+    }
+
+    function mint(string memory _text, uint256 _flips, address _owner) external onlyMinter {
         _safeMint(_owner, tokenCounter);
         tokenTexts[tokenCounter] = _text;
         flips[tokenCounter] = _flips;
@@ -30,6 +37,10 @@ contract OrNoBadgeNFT is ERC721Enumerable, Ownable {
 
     function setSVGLibAddress(address _svgLibAddress) public onlyOwner {
         svgLibAddress = _svgLibAddress;
+    }
+
+    function setMinter(address _minterAddress) public onlyOwner {
+        minterAddress = _minterAddress;
     }
 
     function withdraw() external onlyOwner {

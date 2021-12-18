@@ -50,6 +50,15 @@ contract OrNoNFT is ERC721Enumerable, Ownable {
         tokenCounter++;
     }
 
+    function mintMany(string[] memory _texts, bool[] memory _statuses) public onlyOwner {
+        for(uint256 i = 0; i < _texts.length; i++) {
+            _safeMint(msg.sender, tokenCounter);
+            tokenTexts[tokenCounter] = _texts[i];
+            tokenStates[tokenCounter] = _statuses[i];
+            tokenCounter++;
+        }
+    }
+
     function flip(uint256 _tokenId) payable public {
         require(msg.value >= flipPrice, "OrNoNFT: Flip error, unsufficient funds");
         flips[_tokenId] += 1;
